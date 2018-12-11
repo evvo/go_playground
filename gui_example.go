@@ -85,9 +85,13 @@ func setupWindow(title string) *gtk.Window {
 	}
 
 	win.SetTitle(title)
-	win.Connect("destroy", func() {
+	_, err = win.Connect("destroy", func() {
 		gtk.MainQuit()
 	})
+
+	if err != nil {
+		log.Fatal("Unable to create cell column:", err)
+	}
 	win.SetPosition(gtk.WIN_POS_CENTER)
 	win.SetDefaultSize(600, 300)
 	return win
@@ -99,9 +103,12 @@ func main() {
 	win := setupWindow("Go Feature Timeline")
 
 	treeView, listStore := setupTreeView()
-	treeView.Connect("button-press-event", func() {
+	_, err := treeView.Connect("button-press-event", func() {
 		log.Print("Button Was Clicked")
 	})
+	if err != nil {
+		log.Fatal("Unable to create cell column:", err)
+	}
 	win.Add(treeView)
 
 	// Add some rows to the list store
